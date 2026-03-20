@@ -1,7 +1,9 @@
+import index from '../public/index.html';
+
 const server = Bun.serve({
   port: 3100,
   routes: {
-    '/': new Response('Hola mundo!!!')
+    '/': index
   },
   fetch(req, server) {
     // upgrade the request to a WebSocket
