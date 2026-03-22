@@ -1,18 +1,61 @@
 import index from '../public/index.html';
 
+type WebSocketData = {
+  channelId:string;
+  xToken:string;
+  session: session
+}
+
+type session = {
+  id:number;
+  sessionId:string
+}
+
 const server = Bun.serve({
   port: 3100,
   routes: {
     '/': index
   },
   fetch(req, server) {
-    // upgrade the request to a WebSocket
-    if (server.upgrade(req)) {
-      return; // do not return a Response
+    const cookies = new Bun.CookieMap(req.headers.get('cookie')!);
+    const channelId = new URL(req.url).searchParams.get('channelId') || '';
+
+    const xToken = cookies.get('X-Token');
+    const session = cookies.get('session') ? JSON.parse(cookies.get('session')!) : {};
+    console.log({channelId, xToken, session});
+
+    if (!xToken) {
+      // validarJWT contra la firma de tokens
+      return;
     }
-    return new Response("Upgrade failed", { status: 500 });
+
+    if (!session) {
+      return
+    }
+
+    server.upgrade(req, {
+      data: {
+        channelId: channelId,
+        xToken: xToken,
+        session: session
+      }
+    });
+
+    return undefined;
+
+    // upgrade the request to a WebSocket
+    // if (server.upgrade(req)) {
+    //   return; // do not return a Response
+    // }
+    // return new Response("Upgrade failed", { status: 500 });
   },
   websocket: {
+
+    data:{
+      
+    } as WebSocketData,
+
+
     message(ws, message:string) {
       console.log({ ws, message });
       // ws.send(message.toUpperCase());
