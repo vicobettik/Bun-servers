@@ -20,6 +20,8 @@ const handleAddParty = (payload: unknown): WebSocketResponse => {
 const handleUpdateParty = (payload: unknown): WebSocketResponse => {
   return {
     type: "PARTY_UPDATED",
+
+    // TODO:
     payload: {
       name: "Nueva party",
       parties: [],
@@ -30,6 +32,7 @@ const handleUpdateParty = (payload: unknown): WebSocketResponse => {
 const handleDeleteParty = (payload: unknown): WebSocketResponse => {
   return {
     type: "PARTY_DELETED",
+    //TODO:
     payload: {
       name: "Deleted Party",
       parties: [],
@@ -40,6 +43,7 @@ const handleDeleteParty = (payload: unknown): WebSocketResponse => {
 const handleIncrementVotes = (payload: unknown): WebSocketResponse => {
   return {
     type: "VOTES_UPDATED",
+    //TODO:
     payload: {
       name: "Votes updated",
       parties: [],
@@ -50,6 +54,7 @@ const handleIncrementVotes = (payload: unknown): WebSocketResponse => {
 const handleDecrementVotes = (payload: unknown): WebSocketResponse => {
   return {
     type: "VOTES_UPDATED",
+    //TODO:
     payload: {
       name: "Votes updated",
       parties: [],
@@ -57,7 +62,7 @@ const handleDecrementVotes = (payload: unknown): WebSocketResponse => {
   };
 };
 
-const handleGetParties = (payload: unknown): WebSocketResponse => {
+const handleGetParties = (): WebSocketResponse => {
   return {
     type: "PARTIES_LIST",
     payload: {
@@ -99,8 +104,10 @@ export const handleMessage = (message: string): WebSocketResponse => {
         break;
 
         case "GET_PARTIES":
-        return handleGetParties(payload);
+        return handleGetParties();
         break;
+
+        
 
       default:
         return createErrorResponse(`Unknown message type ${type}`);
