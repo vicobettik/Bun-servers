@@ -50,7 +50,7 @@
         const channelId = "mi-canal-personalizado";
 
         let socket = new WebSocket(
-          `ws://localhost:3100?channelId=${channelId}`,
+          `ws://localhost:3200?channelId=${channelId}`,
         );
         socket.onopen = () => {
           console.log("Websocket conectado");
