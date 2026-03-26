@@ -1,3 +1,4 @@
+import { messageSchema, type MessageParsed } from "../schemas/websocketMessage.schema";
 import { partyService } from "../services/party.service";
 import type { WebSocketMessage, WebSocketResponse } from "../types";
 
@@ -9,8 +10,8 @@ const createErrorResponse = (error: string): WebSocketResponse => {
 };
 
 // handlers especificos
-const handleAddParty = (payload: any): WebSocketResponse => {
-  if (!payload.name || !payload.color || !payload.borderColor) {
+const handleAddParty = (payload: MessageParsed['payload']): WebSocketResponse => {
+  if (!payload?.name || !payload?.color || !payload?.borderColor) {
     return createErrorResponse("Name, color and borderColor are required");
   }
 
@@ -26,8 +27,8 @@ const handleAddParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleUpdateParty = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleUpdateParty = (payload: MessageParsed['payload']): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Party id is required");
   }
 
@@ -48,8 +49,8 @@ const handleUpdateParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleDeleteParty = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleDeleteParty = (payload: MessageParsed['payload']): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Party id is required");
   }
 
@@ -69,8 +70,8 @@ const handleDeleteParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleIncrementVotes = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleIncrementVotes = (payload: MessageParsed['payload']): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Party id is required");
   }
 
@@ -88,8 +89,8 @@ const handleIncrementVotes = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleDecrementVotes = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleDecrementVotes = (payload: MessageParsed['payload']): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Party id is required");
   }
 
@@ -120,11 +121,19 @@ const handleGetParties = (): WebSocketResponse => {
 export const handleMessage = (message: string): WebSocketResponse => {
   try {
     const jsonData: WebSocketMessage = JSON.parse(message);
-    console.log({ payload: jsonData });
 
-    //TODO: validar el json
+    const parsedResult = messageSchema.safeParse(jsonData);
 
-    const { type, payload } = jsonData;
+    if(!parsedResult.success){
+      const errorMessage = parsedResult.error.issues
+        .map((issue) => issue.message)
+        .join(',');
+      
+      return createErrorResponse(`Validation errror ${errorMessage}`);
+      
+    }
+
+    const { type, payload } = parsedResult.data;
 
     switch (type) {
       case "ADD_PARTY":

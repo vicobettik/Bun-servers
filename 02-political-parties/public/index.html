@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Websockets Cliente</title>
     <link rel="icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <h1>Status</h1>
@@ -69,7 +70,7 @@
         };
 
         socket.onmessage = (event) => {
-          console.log(event.data);
+          // console.log(event.data);
           showMessage(event.data);
         };
 
@@ -114,10 +115,10 @@
       });
 
       const showMessage = (message) => {
-        const li = document.createElement("li");
-        li.textContent = message;
+        const pre = document.createElement("pre");
+        pre.innerHTML = JSON.stringify(JSON.parse(message), null, 2);
 
-        messagesContainer.appendChild(li);
+        messagesContainer.prepend(pre);
       };
     </script>
   </body>
