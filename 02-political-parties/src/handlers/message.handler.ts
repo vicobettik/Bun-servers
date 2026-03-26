@@ -10,7 +10,7 @@ const createErrorResponse = (error: string): WebSocketResponse => {
 
 // handlers especificos
 const handleAddParty = (payload: any): WebSocketResponse => {
-  if (payload?.name || payload?.color || payload?.borderColor) {
+  if (!payload.name || !payload.color || !payload.borderColor) {
     return createErrorResponse("Name, color and borderColor are required");
   }
 
