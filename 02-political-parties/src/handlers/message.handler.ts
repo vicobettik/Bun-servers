@@ -111,9 +111,7 @@ const handleDecrementVotes = (payload: MessageParsed['payload']): WebSocketRespo
 export const handleGetParties = (): WebSocketResponse => {
   return {
     type: "PARTIES_LIST",
-    payload: {
-      parties: partyService.getAll(),
-    },
+    payload: partyService.getAll(),
   };
 };
 
