@@ -31,16 +31,20 @@ class PartyService{
             return null;
         }
 
-        if (!updates.name) {
-            party.name = updates.name!;
+        if (updates.name) {
+            party.name = updates.name;
         }
 
-        if (!updates.borderColor) {
-            party.borderColor = updates.borderColor!;
+        if (updates.color) {
+            party.color = updates.color;
         }
 
-        if (!updates.votes) {
-            party.votes = updates.votes!;
+        if (updates.borderColor) {
+            party.borderColor = updates.borderColor;
+        }
+
+        if (updates.votes) {
+            party.votes = updates.votes;
         }
 
         return party;
